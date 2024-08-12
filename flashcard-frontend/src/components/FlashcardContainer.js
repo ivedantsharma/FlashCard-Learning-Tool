@@ -13,8 +13,8 @@ const FlashcardContainer = () => {
       try {
         const response = await axios.get(
           selectedCategory
-            ? `http://localhost:5000/api/flashcards/${selectedCategory}`
-            : "http://localhost:5000/api/flashcards"
+            ? `${process.env.REACT_APP_BACKEND_URL}/api/flashcards/${selectedCategory}`
+            : `${process.env.REACT_APP_BACKEND_URL}/api/flashcards`
         );
         setFlashcards(response.data);
         setCurrentIndex(0);
