@@ -64,6 +64,10 @@ const FlashcardItem = styled.div`
   }
 `;
 
+const backendURL =
+  process.env.REACT_APP_BACKEND_URL ||
+  "https://flachcards-quiz-backend-production.up.railway.app";
+
 const Dashboard = () => {
   const [flashcards, setFlashcards] = useState([]);
   const [question, setQuestion] = useState("");
@@ -77,7 +81,7 @@ const Dashboard = () => {
 
   const fetchFlashcards = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/flashcards");
+      const response = await axios.get(`${backendURL}`);
       setFlashcards(response.data);
     } catch (error) {
       console.error("Error fetching flashcards:", error);
@@ -87,13 +91,13 @@ const Dashboard = () => {
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
     if (editId) {
-      await axios.put(`http://localhost:5000/api/flashcards/${editId}`, {
+      await axios.put(`${backendURL}/api/flashcards/${editId}`, {
         question,
         answer,
         category,
       });
     } else {
-      await axios.post("http://localhost:5000/api/flashcards", {
+      await axios.post(`${backendURL}/api/flashcards`, {
         question,
         answer,
         category,
@@ -114,7 +118,7 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/flashcards/${id}`);
+    await axios.delete(`${backendURL}/api/flashcards/${id}`);
     fetchFlashcards();
   };
 

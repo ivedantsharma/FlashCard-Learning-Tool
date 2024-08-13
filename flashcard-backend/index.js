@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MySQL connection
-const urlDB = `mysql://root:NWaIjcVIwfJUwxAlMjQTJZNopPDUaagQ@mysql.railway.internal:3306/railway`;
+const urlDB = process.env.DB_URL; // Use environment variable for database URL
 const db = mysql.createConnection(urlDB);
 
 db.connect((err) => {
@@ -47,7 +47,7 @@ app.get("/api/flashcards/:category", (req, res) => {
   );
 });
 
-//   Add a new FlashCard
+// Add a new FlashCard
 app.post("/api/flashcards", (req, res) => {
   const { question, answer, category } = req.body;
   db.query(
@@ -62,7 +62,7 @@ app.post("/api/flashcards", (req, res) => {
   );
 });
 
-//   Edit Flashcard
+// Edit Flashcard
 app.put("/api/flashcards/:id", (req, res) => {
   const { id } = req.params;
   const { question, answer, category } = req.body;
@@ -81,7 +81,7 @@ app.put("/api/flashcards/:id", (req, res) => {
   );
 });
 
-//   Delete Flashcard
+// Delete Flashcard
 app.delete("/api/flashcards/:id", (req, res) => {
   const { id } = req.params;
   db.query("DELETE FROM flashcards WHERE id = ?", [id], (err, results) => {

@@ -7,6 +7,22 @@ const FlashcardContainer = () => {
   const [flashcards, setFlashcards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/categories`
+        );
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchFlashcards = async () => {
@@ -43,9 +59,11 @@ const FlashcardContainer = () => {
         onChange={(e) => setSelectedCategory(e.target.value)}
       >
         <option value="">All Categories</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="Database">Database</option>
-        {/* Add more categories as needed */}
+        {categories.map((category) => (
+          <option key={category} value={category}>
+            {category}
+          </option>
+        ))}
       </CategorySelector>
       <CategoryTitle>
         Category: <span>{selectedCategory || "All"}</span>
