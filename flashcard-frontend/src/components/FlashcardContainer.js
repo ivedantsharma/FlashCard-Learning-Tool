@@ -1,7 +1,71 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import Flashcard from "./Flashcard";
+
+const categoriesData = ["JavaScript", "Database", "React", "Node.js", "CSS"];
+
+const flashcardsData = [
+  {
+    question: "What is a closure?",
+    answer:
+      "A closure is a function that retains access to its lexical scope, even when the function is executed outside that scope.",
+    category: "JavaScript",
+  },
+  {
+    question: "What is a promise?",
+    answer:
+      "A promise is an object that represents the eventual completion or failure of an asynchronous operation.",
+    category: "JavaScript",
+  },
+  {
+    question: "What is normalization?",
+    answer:
+      "Normalization is the process of organizing data to reduce redundancy and improve data integrity.",
+    category: "Database",
+  },
+  {
+    question: "What is an index in SQL?",
+    answer:
+      "An index is a database object that improves the speed of data retrieval operations on a table.",
+    category: "Database",
+  },
+  {
+    question: "What is JSX?",
+    answer:
+      "JSX is a syntax extension for JavaScript that allows writing HTML-like code within JavaScript.",
+    category: "React",
+  },
+  {
+    question: "What is a component in React?",
+    answer:
+      "A component is a reusable piece of UI that can be either a class or a function.",
+    category: "React",
+  },
+  {
+    question: "What is middleware in Node.js?",
+    answer:
+      "Middleware is a function that has access to the request, response, and the next function in the application's request-response cycle.",
+    category: "Node.js",
+  },
+  {
+    question: "What is Express.js?",
+    answer:
+      "Express.js is a web application framework for Node.js designed for building web applications and APIs.",
+    category: "Node.js",
+  },
+  {
+    question: "What is Flexbox?",
+    answer:
+      "Flexbox is a layout model in CSS that allows responsive alignment and distribution of space within a container.",
+    category: "CSS",
+  },
+  {
+    question: "What is the Box Model in CSS?",
+    answer:
+      "The Box Model is a box that wraps around every HTML element, consisting of margins, borders, padding, and the actual content.",
+    category: "CSS",
+  },
+];
 
 const FlashcardContainer = () => {
   const [flashcards, setFlashcards] = useState([]);
@@ -10,36 +74,21 @@ const FlashcardContainer = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/categories`
-        );
-        setCategories(response.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchCategories();
+    // Initialize categories and flashcards
+    setCategories(categoriesData);
   }, []);
 
   useEffect(() => {
-    const fetchFlashcards = async () => {
-      try {
-        const response = await axios.get(
-          selectedCategory
-            ? `${process.env.REACT_APP_BACKEND_URL}/api/flashcards/${selectedCategory}`
-            : `${process.env.REACT_APP_BACKEND_URL}/api/flashcards`
-        );
-        setFlashcards(response.data);
-        setCurrentIndex(0);
-      } catch (error) {
-        console.error("Error fetching flashcards:", error);
-      }
-    };
-
-    fetchFlashcards();
+    // Filter flashcards based on the selected category
+    if (selectedCategory) {
+      const filteredFlashcards = flashcardsData.filter(
+        (flashcard) => flashcard.category === selectedCategory
+      );
+      setFlashcards(filteredFlashcards);
+    } else {
+      setFlashcards(flashcardsData);
+    }
+    setCurrentIndex(0);
   }, [selectedCategory]);
 
   const handleNext = () => {

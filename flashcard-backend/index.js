@@ -22,7 +22,7 @@ db.connect((err) => {
   console.log("Connected to database.");
 });
 
-// Get All FlashCard
+// Get All FlashCards
 app.get("/api/flashcards", (req, res) => {
   db.query("SELECT * FROM flashcards", (err, results) => {
     if (err) {
@@ -32,7 +32,7 @@ app.get("/api/flashcards", (req, res) => {
   });
 });
 
-// Get FlashCard by Category
+// Get FlashCards by Category
 app.get("/api/flashcards/:category", (req, res) => {
   const category = req.params.category;
   db.query(
@@ -45,6 +45,19 @@ app.get("/api/flashcards/:category", (req, res) => {
       res.json(results);
     }
   );
+});
+
+// Endpoint to get all categories
+app.get("/api/categories", async (req, res) => {
+  try {
+    const [rows] = await db
+      .promise()
+      .query("SELECT DISTINCT category FROM flashcards");
+    res.json(rows.map((row) => row.category));
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    res.status(500).send("Server Error");
+  }
 });
 
 // Add a new FlashCard
